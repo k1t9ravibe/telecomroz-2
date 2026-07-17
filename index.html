@@ -29,11 +29,14 @@
       .ts-preview > span { color: #147fd0; font-size: 10px; font-weight: 800; }.ts-preview h3 { margin: 6px 0; font-size: 12px; }
       .ts-preview pre { margin: 0; white-space: pre-wrap; color: #40506b; font: 10px/1.55 Manrope, sans-serif; }
       main { position: relative; isolation: isolate; }
-      main::before { content: ""; position: fixed; right: -155px; bottom: -105px; width: min(66vw, 760px); height: min(66vw, 760px); background: url("kazakhtelecom-logo.png") center / contain no-repeat; filter: brightness(0) invert(1); opacity: .13; pointer-events: none; z-index: 0; }
+      main::before { content: ""; position: fixed; right: -155px; bottom: -105px; width: min(66vw, 760px); height: min(66vw, 760px); background: url("kazakhtelecom-logo.png") center / contain no-repeat; mix-blend-mode: multiply; opacity: .34; pointer-events: none; z-index: 0; }
       main > * { position: relative; z-index: 1; }
+      .logo-watermark { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: url("kazakhtelecom-logo.png") center 56% / min(58vw, 720px) no-repeat; mix-blend-mode: multiply; opacity: .28; }
+      .sidebar { z-index: 2; } main { z-index: 1; }
     </style>
   </head>
   <body>
+    <div class="logo-watermark" aria-hidden="true"></div>
     <aside class="sidebar">
       <a class="brand" href="#"><img src="kazakhtelecom-logo.png" alt="Казахтелеком" /><span>Telecom<span>Roz</span><small>Казахтелеком</small></span></a>
       <nav>
