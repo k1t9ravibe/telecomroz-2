@@ -8,10 +8,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Kazakhtelecom blue visual system */
+      body { background: linear-gradient(135deg, #0879cf 0%, #18a5ed 58%, #32baf3 100%) fixed; }
+      .sidebar { background: linear-gradient(180deg, #0876c9, #0a91dc); border-right-color: #ffffff42; }
+      .brand { color: #fff; font-size: 15px; padding: 0 8px 38px; }
+      .brand img { width: 38px; height: 30px; object-fit: contain; background: #fff; border-radius: 7px; padding: 3px; }
+      .brand > span:last-child span { color: #d9f4ff; }
+      .brand small { display: block; margin-top: 2px; color: #c8efff; font: 700 7px Manrope; letter-spacing: 1px; text-transform: uppercase; }
+      .nav-item { color: #d8f3ff; }.nav-item b { background: #fff; color: #147fce; }
+      .nav-item:hover, .nav-item.active { background: #fff; color: #1489d9; box-shadow: 0 5px 14px #075d9f33; }
+      .profile { border-top-color: #ffffff42; color: #e7f8ff; }.profile strong { color: #fff; }.profile small { color: #c9efff; }.avatar { background: #fff; color: #168bda; }
+      .eyebrow, h1 { color: #fff; }.icon-button, .help { border-color: #ffffff91; color: #147dca; }
+      .primary { background: #147fd0; box-shadow: 0 5px 12px #075f9c3d; }.primary:hover { background: #096bb5; }
+      .metric, .panel, .empty-state { border-color: #ffffffb8; box-shadow: 0 10px 24px #0759891f; }
+      .ai-card { background: linear-gradient(145deg, #0876c9, #19a8ed); }.ai-card p { color: #e2f8ff; }.ai-card .label { color: #c6f1ff; }
+      .ai-orb { background: linear-gradient(135deg, #fff, #c8efff); color: #1388d8; box-shadow: 0 0 30px #8be0ff; }.light-button { color: #147dc8; }.ai-spark { color: #dcf7ff; }
+      .modal-backdrop { background: #07517b8c; }.file-input { display: none; }
+    </style>
   </head>
   <body>
     <aside class="sidebar">
-      <a class="brand" href="#"><span class="brand-mark">T</span><span>Telecom<span>Roz</span></span></a>
+      <a class="brand" href="#"><img src="kazakhtelecom-logo.png" alt="Казахтелеком" /><span>Telecom<span>Roz</span><small>Казахтелеком</small></span></a>
       <nav>
         <button class="nav-item active" data-page="dashboard"><span>▦</span>Обзор</button>
         <button class="nav-item" data-page="purchases"><span>◫</span>Закупки <b>12</b></button>
@@ -55,9 +73,9 @@
       </section>
 
       <section class="page simple-page" id="purchases"><div class="section-title"><div><p class="eyebrow">РЕЕСТР</p><h2>Все закупки</h2></div><button class="primary" id="create-btn-2">＋ Создать закупку</button></div><div class="panel table-panel"><div class="table-tools"><input placeholder="Поиск по названию или номеру" /><button class="filter">☷ Фильтры</button></div><div class="table-row table-head"><span>Закупка</span><span>Способ</span><span>Статус</span><span>Дата</span></div><div class="table-row"><strong>Закупка ноутбуков для филиалов</strong><span>Электронный магазин</span><span class="badge review">На проверке</span><span>14.07.2026</span></div><div class="table-row"><strong>Серверное оборудование</strong><span>Тендер</span><span class="badge approval">Согласование</span><span>12.07.2026</span></div><div class="table-row"><strong>Канцелярские товары Q3</strong><span>Запрос ценовых предложений</span><span class="badge returned">На доработке</span><span>08.07.2026</span></div></div></section>
-      <section class="page simple-page" id="documents"><div class="empty-state"><span>▤</span><h2>Документы закупок</h2><p>Технические спецификации, заключения и экспортированные файлы будут доступны здесь.</p><button class="primary" id="upload-btn">Загрузить документ</button></div></section>
+      <section class="page simple-page" id="documents"><div class="empty-state"><span>▤</span><h2>Документы закупок</h2><p>Технические спецификации, заключения и экспортированные файлы будут доступны здесь.</p><input class="file-input" id="document-file" type="file" accept=".pdf,.doc,.docx,.xlsx" /><button class="primary" id="upload-btn">Загрузить документ</button></div></section>
       <section class="page simple-page" id="analytics"><div class="empty-state"><span>◔</span><h2>Аналитика</h2><p>Сводные показатели и отчёты по закупочной деятельности.</p></div></section>
-      <section class="page simple-page" id="knowledge"><div class="empty-state"><span>✦</span><h2>База знаний</h2><p>Загрузите нормативные документы в формате DOCX или PDF для точной проверки заявок AI.</p><button class="primary" id="upload-btn-2">Загрузить нормативный документ</button></div></section>
+      <section class="page simple-page" id="knowledge"><div class="empty-state"><span>✦</span><h2>База знаний</h2><p>Загрузите нормативные документы в формате DOCX или PDF для точной проверки заявок AI.</p><input class="file-input" id="knowledge-file" type="file" accept=".pdf,.doc,.docx" /><button class="primary" id="upload-btn-2">Загрузить нормативный документ</button></div></section>
       <section class="page simple-page" id="settings"><div class="empty-state"><span>⚙</span><h2>Настройки</h2><p>Управляйте профилем, уведомлениями и шаблонами закупочной документации.</p></div></section>
     </main>
 
