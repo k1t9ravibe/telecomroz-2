@@ -61,8 +61,9 @@ function renderAll() {
   list.innerHTML = requests.map(request => `<div class="table-row" data-id="${request.id}" style="cursor:pointer"><strong>${request.title}</strong><span>${request.method}</span><span class="badge review">${request.stage >= 3 ? 'На согласовании' : 'ТС сформирована'}</span><span>${request.date}</span></div>`).join('');
   document.querySelectorAll('#dynamic-purchases .table-row').forEach(row => row.addEventListener('click', () => { const request = requests.find(item => item.id === row.dataset.id); renderFlow(request); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
   const specifications = $('#ready-specifications');
-  specifications.innerHTML = requests.length ? requests.map(request => `<div class="table-row"><strong>${request.title}<small style="display:block;margin-top:3px;color:#8d97a9">${request.number}</small></strong><span>${request.method}</span><span class="badge complete">${request.draft ? 'Черновик ТС' : 'Проверено'}</span><span><button class="text-button download-spec" data-id="${request.id}">Скачать ТС ↓</button></span></div>`).join('') : '<div style="padding:28px;text-align:center;color:#8d97a9">После формирования заявки готовые технические спецификации появятся здесь.</div>';
+  specifications.innerHTML = requests.length ? requests.map(request => `<div class="table-row"><strong>${request.title}<small style="display:block;margin-top:3px;color:#8d97a9">${request.number}</small></strong><span>${request.method}</span><span class="badge complete">${request.draft ? 'Ожидает утверждения' : 'ТС утверждена'}</span><span><button class="text-button download-spec" data-id="${request.id}">Скачать ТС ↓</button>${request.draft ? `<button class="primary approve-spec" data-id="${request.id}" style="padding:7px 9px;margin-left:7px">Утвердить ТС</button>` : ''}</span></div>`).join('') : '<div style="padding:28px;text-align:center;color:#8d97a9">После формирования заявки готовые технические спецификации появятся здесь.</div>';
   document.querySelectorAll('.download-spec').forEach(button => button.addEventListener('click', () => { const request = requests.find(item => item.id === button.dataset.id); const blob = new Blob([request.ts], { type: 'text/plain;charset=utf-8' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `${request.number}-ТС.txt`; link.click(); URL.revokeObjectURL(link.href); }));
+  document.querySelectorAll('.approve-spec').forEach(button => button.addEventListener('click', () => { const request = requests.find(item => item.id === button.dataset.id); request.draft = false; request.stage = 2; saveRequests(); renderAll(); showToast(`ТС по заявке ${request.number} утверждена и передана на проверку.`); }));
   renderFlow(requests[0]);
 }
 
@@ -84,7 +85,7 @@ $('#purchase-form').addEventListener('submit', event => {
   const request = makeRequest(title, requirements, method, details, ts);
   requests.unshift(request); saveRequests(); renderAll(); closeModal(); generatedTs = ''; activeDraftId = null;
   $('#purchase-form').reset(); $('#ts-preview').hidden = true; $('#generate-btn').innerHTML = 'Сформировать ТС <span>→</span>';
-  openPage('specifications'); showToast(`ТС по заявке ${request.number} сформирована и сохранена в «Готовые ТС».`);
+  openPage('specifications'); setTimeout(() => $('#ready-specifications').scrollIntoView({ behavior: 'smooth', block: 'end' }), 250); showToast(`ТС по заявке ${request.number} сформирована. Прокрутите до кнопки «Утвердить ТС».`);
 });
 $('#configure-store').addEventListener('click', () => showToast('Используйте диапазоны характеристик для сохранения конкуренции.'));
 $('#ai-btn').addEventListener('click', () => { openModal(); $('#purchase-type').value = 'Электронный магазин'; $('#store-option').classList.add('visible'); });
