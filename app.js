@@ -1,7 +1,7 @@
 const $ = (selector) => document.querySelector(selector);
 const modal = $('#modal');
 const toast = $('#toast');
-const titles = {dashboard:'Доброе утро, Алия',purchases:'Закупки',documents:'Документы',analytics:'Аналитика',knowledge:'База знаний',settings:'Настройки'};
+const titles = {dashboard:'Доброе утро, Тест Тестович',purchases:'Закупки',documents:'Документы',analytics:'Аналитика',knowledge:'База знаний',settings:'Настройки'};
 function showToast(message){toast.textContent=message;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}
 function openModal(){modal.classList.add('show');document.body.style.overflow='hidden'}
 function closeModal(){modal.classList.remove('show');document.body.style.overflow=''}
