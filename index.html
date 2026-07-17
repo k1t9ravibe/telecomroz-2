@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TelecomRoz 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">T</span><span>Telecom<span>Roz</span></span></a>
+      <nav>
+        <button class="nav-item active" data-page="dashboard"><span>▦</span>Обзор</button>
+        <button class="nav-item" data-page="purchases"><span>◫</span>Закупки <b>12</b></button>
+        <button class="nav-item" data-page="documents"><span>▤</span>Документы</button>
+        <button class="nav-item" data-page="analytics"><span>◔</span>Аналитика</button>
+        <button class="nav-item" data-page="knowledge"><span>✦</span>База знаний</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-page="settings"><span>⚙</span>Настройки</button>
+        <div class="profile"><div class="avatar">АМ</div><div><strong>Алия Мусина</strong><small>Инициатор закупок</small></div><span>⌄</span></div>
+      </div>
+    </aside>
+
+    <main>
+      <header>
+        <div><p class="eyebrow">ПЯТНИЦА, 17 ИЮЛЯ</p><h1 id="page-title">Доброе утро, Алия</h1></div>
+        <div class="header-actions"><button class="icon-button" aria-label="Уведомления">♧<i></i></button><button class="help">?</button><button class="primary" id="create-btn">＋ Создать закупку</button></div>
+      </header>
+
+      <section class="dashboard page active" id="dashboard">
+        <div class="metrics">
+          <article class="metric blue"><div class="metric-icon">▣</div><div><span>Всего закупок</span><strong>12</strong><small>За текущий месяц</small></div><b class="trend">↑ 20%</b></article>
+          <article class="metric violet"><div class="metric-icon">◔</div><div><span>На согласовании</span><strong>4</strong><small>Требуют внимания</small></div><b class="attention">2 срочных</b></article>
+          <article class="metric mint"><div class="metric-icon">✓</div><div><span>Успешно завершено</span><strong>28</strong><small>С начала года</small></div><b class="trend">↑ 14%</b></article>
+          <article class="metric orange"><div class="metric-icon">₸</div><div><span>Объём закупок</span><strong>148,6 млн</strong><small>Тенге с начала года</small></div><b class="trend">↑ 8,2%</b></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel purchases-panel"><div class="panel-head"><div><h2>Активные закупки</h2><p>Ваши последние заявки и их статус</p></div><button class="text-button" data-page-link="purchases">Все закупки →</button></div>
+            <div class="purchase-list">
+              <div class="purchase-row"><div class="file-icon blue-bg">▤</div><div class="purchase-main"><strong>Закупка ноутбуков для филиалов</strong><span>№ TR-2026-0714 · Создана 14 июл. 2026</span></div><span class="badge review">На проверке</span><div class="progress"><i style="width:65%"></i></div><span class="percent">65%</span><button class="more">•••</button></div>
+              <div class="purchase-row"><div class="file-icon purple-bg">▤</div><div class="purchase-main"><strong>Серверное оборудование</strong><span>№ TR-2026-0712 · Создана 12 июл. 2026</span></div><span class="badge approval">Согласование</span><div class="progress"><i style="width:82%"></i></div><span class="percent">82%</span><button class="more">•••</button></div>
+              <div class="purchase-row"><div class="file-icon yellow-bg">▤</div><div class="purchase-main"><strong>Канцелярские товары Q3</strong><span>№ TR-2026-0708 · Создана 8 июл. 2026</span></div><span class="badge returned">На доработке</span><div class="progress"><i style="width:38%"></i></div><span class="percent">38%</span><button class="more">•••</button></div>
+              <div class="purchase-row"><div class="file-icon green-bg">▤</div><div class="purchase-main"><strong>Услуги технической поддержки</strong><span>№ TR-2026-0705 · Создана 5 июл. 2026</span></div><span class="badge complete">Завершена</span><div class="progress"><i style="width:100%"></i></div><span class="percent">100%</span><button class="more">•••</button></div>
+            </div>
+          </section>
+          <aside class="panel ai-card"><div class="ai-orb">✦</div><span class="label">TELECOMROZ AI</span><h2>Умный помощник<br />для ваших закупок</h2><p>Создавайте технические спецификации, проверяйте документы и анализируйте рынок быстрее.</p><button class="light-button" id="ai-btn">Начать работу с AI <span>→</span></button><div class="ai-spark one">✦</div><div class="ai-spark two">✧</div></aside>
+        </div>
+
+        <section class="panel chart-panel"><div class="panel-head"><div><h2>Динамика закупок</h2><p>Количество созданных заявок по месяцам</p></div><select aria-label="Период"><option>2026 год</option><option>2025 год</option></select></div><div class="chart"><div class="y-labels"><span>12</span><span>9</span><span>6</span><span>3</span><span>0</span></div><div class="bars"><i style="height:34%"></i><i style="height:49%"></i><i style="height:41%"></i><i style="height:66%"></i><i style="height:54%"></i><i style="height:82%"></i><i class="selected" style="height:72%"><b>8</b></i><i style="height:45%"></i><i style="height:0%"></i><i style="height:0%"></i><i style="height:0%"></i><i style="height:0%"></i></div><div class="months"><span>Янв</span><span>Фев</span><span>Мар</span><span>Апр</span><span>Май</span><span>Июн</span><span>Июл</span><span>Авг</span><span>Сен</span><span>Окт</span><span>Ноя</span><span>Дек</span></div></div></section>
+      </section>
+
+      <section class="page simple-page" id="purchases"><div class="section-title"><div><p class="eyebrow">РЕЕСТР</p><h2>Все закупки</h2></div><button class="primary" id="create-btn-2">＋ Создать закупку</button></div><div class="panel table-panel"><div class="table-tools"><input placeholder="Поиск по названию или номеру" /><button class="filter">☷ Фильтры</button></div><div class="table-row table-head"><span>Закупка</span><span>Способ</span><span>Статус</span><span>Дата</span></div><div class="table-row"><strong>Закупка ноутбуков для филиалов</strong><span>Электронный магазин</span><span class="badge review">На проверке</span><span>14.07.2026</span></div><div class="table-row"><strong>Серверное оборудование</strong><span>Тендер</span><span class="badge approval">Согласование</span><span>12.07.2026</span></div><div class="table-row"><strong>Канцелярские товары Q3</strong><span>Запрос ценовых предложений</span><span class="badge returned">На доработке</span><span>08.07.2026</span></div></div></section>
+      <section class="page simple-page" id="documents"><div class="empty-state"><span>▤</span><h2>Документы закупок</h2><p>Технические спецификации, заключения и экспортированные файлы будут доступны здесь.</p><button class="primary" id="upload-btn">Загрузить документ</button></div></section>
+      <section class="page simple-page" id="analytics"><div class="empty-state"><span>◔</span><h2>Аналитика</h2><p>Сводные показатели и отчёты по закупочной деятельности.</p></div></section>
+      <section class="page simple-page" id="knowledge"><div class="empty-state"><span>✦</span><h2>База знаний</h2><p>Загрузите нормативные документы в формате DOCX или PDF для точной проверки заявок AI.</p><button class="primary" id="upload-btn-2">Загрузить нормативный документ</button></div></section>
+      <section class="page simple-page" id="settings"><div class="empty-state"><span>⚙</span><h2>Настройки</h2><p>Управляйте профилем, уведомлениями и шаблонами закупочной документации.</p></div></section>
+    </main>
+
+    <div class="modal-backdrop" id="modal"><form class="modal" id="purchase-form"><button type="button" class="close" id="close-modal">×</button><p class="eyebrow">НОВАЯ ЗАЯВКА</p><h2>Создать закупку</h2><div class="steps"><span class="current">1. Основное</span><span>2. Потребность</span><span>3. Проверка AI</span></div><label>Название закупки<input required placeholder="Например, Закупка офисной техники" /></label><div class="form-grid"><label>Подразделение<select><option>Региональный отдел закупок</option><option>IT-департамент</option><option>Административный отдел</option></select></label><label>Способ закупки<select id="purchase-type"><option>Тендер</option><option>Один источник</option><option>Запрос ценовых предложений</option><option>Электронный магазин</option></select></label></div><label>Описание потребности<textarea required placeholder="Опишите, что необходимо приобрести и для каких задач"></textarea></label><div class="store-option" id="store-option"><span>✦</span><div><strong>Параметры электронного магазина</strong><p>AI поможет задать точные или диапазонные характеристики без ограничения конкуренции.</p></div><button type="button" id="configure-store">Настроить</button></div><div class="modal-actions"><button type="button" class="secondary" id="save-draft">Сохранить черновик</button><button class="primary" type="submit">Продолжить <span>→</span></button></div></form></div>
+    <div class="toast" id="toast">Черновик закупки сохранён</div>
+    <script src="app.js"></script>
+  </body>
+</html>
