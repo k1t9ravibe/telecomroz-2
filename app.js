@@ -5,7 +5,8 @@ const STORAGE_KEY = 'telecomroz-requests-v1';
 const titles = { dashboard: 'Доброе утро, Тест Тестович', purchases: 'Мои заявки', documents: 'Документы', specifications: 'Готовые ТС', analytics: 'Аналитика', knowledge: 'База знаний', settings: 'Настройки' };
 let generatedTs = '';
 let activeDraftId = null;
-let requests = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+let requests = [];
+try { requests = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); if (!Array.isArray(requests)) requests = []; } catch { localStorage.removeItem(STORAGE_KEY); }
 
 function addTsFields() {
   const requirementsLabel = $('#requirements').closest('label');
@@ -37,6 +38,9 @@ function makeCompliance(requirements, method) {
   return checks;
 }
 function saveRequests() { localStorage.setItem(STORAGE_KEY, JSON.stringify(requests)); }
+function makeRequest(title, requirements, method, details, ts) {
+  return { id: String(Date.now()), number: `TR-2026-${String(Date.now()).slice(-4)}`, title, requirements, details, method, ts, compliance: makeCompliance(requirements, method), date: new Intl.DateTimeFormat('ru-RU').format(new Date()), stage: 1, draft: true };
+}
 function getFlowContainer() {
   let container = $('#request-flow');
   if (!container) { container = document.createElement('div'); container.id = 'request-flow'; document.querySelector('#purchases .table-panel').before(container); }
@@ -76,8 +80,11 @@ $('#purchase-form').addEventListener('submit', event => {
   const title = $('#request-title').value.trim(); const requirements = $('#requirements').value.trim(); const method = $('#purchase-type').value;
   if (!title || !requirements) { showToast('Заполните название заявки и технические требования, чтобы сформировать ТС.'); return; }
   const details = { quantity: $('#ts-quantity').value, unit: $('#ts-unit').value, delivery: $('#ts-delivery').value, deadline: $('#ts-deadline').value, warranty: $('#ts-warranty').value };
-  if (!generatedTs) { generatedTs = makeTs(title, requirements, method, details); const request = { id: String(Date.now()), number: `TR-2026-${String(Date.now()).slice(-4)}`, title, requirements, details, method, ts: generatedTs, compliance: makeCompliance(requirements, method), date: new Intl.DateTimeFormat('ru-RU').format(new Date()), stage: 1, draft: true }; requests.unshift(request); activeDraftId = request.id; saveRequests(); renderAll(); $('#ts-content').textContent = generatedTs; $('#ts-preview').hidden = false; $('#generate-btn').innerHTML = 'Создать заявку <span>→</span>'; showToast('ТС сформирована и закреплена во вкладке «Готовые ТС».'); return; }
-  const request = requests.find(item => item.id === activeDraftId); if (request) request.draft = false; saveRequests(); renderAll(); closeModal(); generatedTs = ''; activeDraftId = null; $('#purchase-form').reset(); $('#ts-preview').hidden = true; $('#generate-btn').innerHTML = 'Сформировать ТС <span>→</span>'; openPage('purchases'); showToast(`Заявка ${request?.number || ''} создана. Следующий этап — проверка ТС.`);
+  if (!generatedTs) { generatedTs = makeTs(title, requirements, method, details); const request = makeRequest(title, requirements, method, details, generatedTs); requests.unshift(request); activeDraftId = request.id; saveRequests(); renderAll(); $('#ts-content').textContent = generatedTs; $('#ts-preview').hidden = false; $('#generate-btn').innerHTML = 'Создать заявку <span>→</span>'; showToast('ТС сформирована и закреплена во вкладке «Готовые ТС».'); return; }
+  let request = requests.find(item => item.id === activeDraftId) || requests.find(item => item.draft && item.title === title);
+  if (!request) { request = makeRequest(title, requirements, method, details, generatedTs); requests.unshift(request); }
+  request.title = title; request.requirements = requirements; request.method = method; request.details = details; request.ts = generatedTs; request.compliance = makeCompliance(requirements, method); request.draft = false;
+  saveRequests(); renderAll(); closeModal(); generatedTs = ''; activeDraftId = null; $('#purchase-form').reset(); $('#ts-preview').hidden = true; $('#generate-btn').innerHTML = 'Сформировать ТС <span>→</span>'; openPage('purchases'); showToast(`Заявка ${request.number} сохранена. Следующий этап — проверка ТС.`);
 });
 $('#configure-store').addEventListener('click', () => showToast('Используйте диапазоны характеристик для сохранения конкуренции.'));
 $('#ai-btn').addEventListener('click', () => { openModal(); $('#purchase-type').value = 'Электронный магазин'; $('#store-option').classList.add('visible'); });
