@@ -15,4 +15,12 @@ $('#save-draft').addEventListener('click',()=>{closeModal();showToast('Черн�
 $('#purchase-form').addEventListener('submit',(e)=>{e.preventDefault();closeModal();showToast('Заявка создана. AI приступает к анализу потребности.')});
 $('#configure-store').addEventListener('click',()=>showToast('Открыт режим диапазонных характеристик'));
 $('#ai-btn').addEventListener('click',()=>{openModal();$('#purchase-type').value='Электронный магазин';$('#store-option').classList.add('visible')});
-['#upload-btn','#upload-btn-2'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>showToast('Выберите DOCX или PDF для загрузки'))});
+function connectUpload(buttonSelector, inputSelector) {
+  const button = $(buttonSelector); const input = $(inputSelector);
+  button.addEventListener('click', () => input.click());
+  input.addEventListener('change', () => {
+    if (input.files.length) showToast(`Файл «${input.files[0].name}» добавлен к заявке`);
+  });
+}
+connectUpload('#upload-btn', '#document-file');
+connectUpload('#upload-btn-2', '#knowledge-file');
