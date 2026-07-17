@@ -2,9 +2,15 @@ const $ = (selector) => document.querySelector(selector);
 const modal = $('#modal');
 const toast = $('#toast');
 const STORAGE_KEY = 'telecomroz-requests-v1';
-const titles = { dashboard: 'Доброе утро, Тест Тестович', purchases: 'Заявки', documents: 'Документы', specifications: 'Готовые ТС', analytics: 'Аналитика', knowledge: 'База знаний', settings: 'Настройки' };
+const titles = { dashboard: 'Доброе утро, Тест Тестович', purchases: 'Мои заявки', documents: 'Документы', specifications: 'Готовые ТС', analytics: 'Аналитика', knowledge: 'База знаний', settings: 'Настройки' };
 let generatedTs = '';
 let requests = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+function addTsFields() {
+  const requirementsLabel = $('#requirements').closest('label');
+  requirementsLabel.insertAdjacentHTML('beforebegin', `<div class="form-grid"><label>Количество<input id="ts-quantity" required inputmode="numeric" placeholder="Например, 25" /></label><label>Единица измерения<input id="ts-unit" required placeholder="шт., услуга, комплект" /></label><label>Место поставки<input id="ts-delivery" required placeholder="Город, адрес" /></label><label>Срок поставки<input id="ts-deadline" required placeholder="Например, 30 календарных дней" /></label></div><label>Гарантия<input id="ts-warranty" required placeholder="Например, не менее 12 месяцев" /></label>`);
+}
+addTsFields();
 
 function showToast(message) { toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3200); }
 function openModal() { modal.classList.add('show'); document.body.style.overflow = 'hidden'; }
@@ -16,9 +22,10 @@ function openPage(page) {
   $('#page-title').textContent = titles[page] || 'TelecomRoz';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function makeTs(title, requirements, method) {
+function makeTs(title, requirements, method, details) {
   const today = new Intl.DateTimeFormat('ru-RU').format(new Date());
-  return `ТЕХНИЧЕСКАЯ СПЕЦИФИКАЦИЯ\n\n1. Наименование ТРУ\n${title}\n\n2. Способ закупки\n${method}\n\n3. Описание потребности и характеристики\n${requirements}\n\n4. Требования к качеству\nТРУ должны соответствовать заявленным характеристикам и действующим нормативным документам. Эквивалентные характеристики допускаются при сохранении потребности Заказчика.\n\n5. Условия поставки\nКоличество, срок, место поставки, комплектность и гарантия определяются требованиями заявки и договором о закупках.\n\n6. Контроль соответствия\nДо согласования проверяются полнота ТС, отсутствие дискриминационных требований и комплектность обосновывающих документов.\n\nСформировано: ${today}`;
+  const value = (key, fallback = 'Уточняется в заявке') => details[key]?.trim() || fallback;
+  return `ТЕХНИЧЕСКАЯ СПЕЦИФИКАЦИЯ\n\n1. Предмет закупки\n${title}\n\n2. Способ закупки\n${method}\n\n3. Количество и единица измерения\n${value('quantity', 'Не указано')} ${value('unit', '')}\n\n4. Функциональные и технические характеристики\n${requirements}\n\n5. Требования к качеству\nТРУ должны соответствовать заявленным характеристикам и применимым нормативным документам. Допускаются эквивалентные решения, если они не ухудшают функциональные, качественные и эксплуатационные свойства.\n\n6. Условия поставки\nМесто поставки: ${value('delivery')}\nСрок поставки: ${value('deadline')}\n\n7. Гарантийные обязательства\n${value('warranty')}\n\n8. Проверка соответствия\nПеред согласованием проверяются полнота ТС, отсутствие дискриминационных требований и комплектность обосновывающих документов по Порядку закупок.\n\nДата формирования: ${today}`;
 }
 function makeCompliance(requirements, method) {
   const checks = ['Планирование и формирование лота: проверить до направления на закупку (ст. 33–34).', 'Техническая спецификация сформирована: проверить полноту, отсутствие дискриминационных условий и комплектность документов.'];
@@ -60,13 +67,14 @@ document.querySelectorAll('[data-page-link]').forEach(button => button.addEventL
 $('#close-modal').addEventListener('click', closeModal);
 modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
 $('#purchase-type').addEventListener('change', event => $('#store-option').classList.toggle('visible', event.target.value === 'Электронный магазин'));
-$('#requirements').addEventListener('input', () => { generatedTs = ''; $('#ts-preview').hidden = true; $('#generate-btn').innerHTML = 'Сформировать ТС <span>→</span>'; });
+['#requirements', '#request-title', '#ts-quantity', '#ts-unit', '#ts-delivery', '#ts-deadline', '#ts-warranty'].forEach(selector => $(selector).addEventListener('input', () => { generatedTs = ''; $('#ts-preview').hidden = true; $('#generate-btn').innerHTML = 'Сформировать ТС <span>→</span>'; }));
 $('#save-draft').addEventListener('click', () => { closeModal(); showToast('Черновик заявки сохранён'); });
 $('#purchase-form').addEventListener('submit', event => {
   event.preventDefault();
   const title = $('#request-title').value.trim(); const requirements = $('#requirements').value.trim(); const method = $('#purchase-type').value;
-  if (!generatedTs) { generatedTs = makeTs(title, requirements, method); $('#ts-content').textContent = generatedTs; $('#ts-preview').hidden = false; $('#generate-btn').innerHTML = 'Создать заявку <span>→</span>'; showToast('Проект ТС сформирован. Проверьте его и создайте заявку.'); return; }
-  const request = { id: String(Date.now()), number: `TR-2026-${String(Date.now()).slice(-4)}`, title, requirements, method, ts: generatedTs, compliance: makeCompliance(requirements, method), date: new Intl.DateTimeFormat('ru-RU').format(new Date()), stage: 1 };
+  const details = { quantity: $('#ts-quantity').value, unit: $('#ts-unit').value, delivery: $('#ts-delivery').value, deadline: $('#ts-deadline').value, warranty: $('#ts-warranty').value };
+  if (!generatedTs) { generatedTs = makeTs(title, requirements, method, details); $('#ts-content').textContent = generatedTs; $('#ts-preview').hidden = false; $('#generate-btn').innerHTML = 'Создать заявку <span>→</span>'; showToast('Проект ТС сформирован. Проверьте его и создайте заявку.'); return; }
+  const request = { id: String(Date.now()), number: `TR-2026-${String(Date.now()).slice(-4)}`, title, requirements, details, method, ts: generatedTs, compliance: makeCompliance(requirements, method), date: new Intl.DateTimeFormat('ru-RU').format(new Date()), stage: 1 };
   requests.unshift(request); saveRequests(); renderAll(); closeModal(); generatedTs = ''; $('#purchase-form').reset(); $('#ts-preview').hidden = true; $('#generate-btn').innerHTML = 'Сформировать ТС <span>→</span>'; openPage('purchases'); showToast(`Заявка ${request.number} создана. Следующий этап — проверка ТС.`);
 });
 $('#configure-store').addEventListener('click', () => showToast('Используйте диапазоны характеристик для сохранения конкуренции.'));
@@ -74,4 +82,5 @@ $('#ai-btn').addEventListener('click', () => { openModal(); $('#purchase-type').
 function connectUpload(buttonSelector, inputSelector) { const button = $(buttonSelector); const input = $(inputSelector); button.addEventListener('click', () => input.click()); input.addEventListener('change', () => { if (input.files.length) showToast(`Файл «${input.files[0].name}» добавлен к заявке`); }); }
 connectUpload('#upload-btn', '#document-file');
 connectUpload('#upload-btn-2', '#knowledge-file');
+document.querySelector('#purchases .section-title h2').textContent = 'Мои заявки';
 renderAll();
