@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+body { @apply bg-[#f4f8fc] text-slate-800 antialiased; font-feature-settings: 'tnum' 1; }
+
+.tbl { @apply w-full border-collapse text-[13px]; }
+.tbl thead th { @apply sticky top-0 z-[1] border-b border-line bg-kt-50 px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-kt-800 whitespace-nowrap; }
+.tbl tbody td { @apply border-b border-line/70 px-3 py-2 align-middle; }
+.tbl .num { @apply text-right tabular-nums whitespace-nowrap; }
+.tbl tr.row-over td { background: #fdeeee; }
+.tbl tr.row-over:hover td { background: #fbe0e0; }
+.tbl tr.row-within td { background: #ebf8f1; }
+.tbl tr.row-within:hover td { background: #dcf2e6; }
+.tbl tr.row-plain:hover td { @apply bg-kt-50; }
+
+@media print {
+  .no-print { display: none !important; }
+  html, body, #root { height: auto !important; background: #fff; }
+  .app-shell { min-width: 0 !important; display: block !important; }
+  .app-main { overflow: visible !important; padding: 0 !important; }
+  .print-area { border: none !important; box-shadow: none !important; padding: 0 !important; }
+  @page { size: A4 portrait; margin: 14mm; }
+}
